@@ -1,0 +1,10 @@
+/build/
+/.git
+/.vscode
+node_modules
+
+# Built files
+/es5/
+/lib/
+/lib-temp/
+/dist/
