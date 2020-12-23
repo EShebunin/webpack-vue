@@ -10,11 +10,14 @@ module.exports = merge(common, {
   devServer: {
     historyApiFallback: true,
     contentBase: paths.build,
-    open: true,
     compress: true,
     hot: true,
+    open: true,
+    host: '0.0.0.0',
     port: 8080,
+    useLocalIp: true,
     overlay: true,
+    stats: 'errors-warnings',
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
