@@ -33,7 +33,6 @@ module.exports = merge(common, {
     ],
   },
   optimization: {
-    // chunkIds: 'named',
     minimize: true,
     minimizer: [
       new TerserPlugin({

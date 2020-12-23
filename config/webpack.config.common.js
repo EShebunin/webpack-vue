@@ -70,11 +70,5 @@ module.exports = {
     },
     extensions: ['*', '.js', '.vue', '.json'],
   },
-  stats: {
-    children: false,
-    chunks: false,
-    chunkModules: false,
-    modules: false,
-    reasons: false,
-  },
+  stats: 'errors-warnings',
 };

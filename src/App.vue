@@ -12,6 +12,14 @@
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap");
 
+$font-size: 1rem;
+$font-color: lch(53 105 40);
+
+html {
+    font-size: $font-size;
+    color: $font-color;
+}
+
 :root {
   --font: Roboto, sans-serif;
   --textColor: #374961;
