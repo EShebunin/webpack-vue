@@ -10,7 +10,7 @@ module.exports = {
   },
   output: {
     path: paths.build,
-    filename: 'js/[name].[contenthash].bundle.js',
+    filename: 'js/[name].bundle.js',
     chunkFilename: 'js/[name].[contenthash].chunk.js',
     publicPath: './',
     assetModuleFilename: 'images/[name][ext]?[hash]',
@@ -25,7 +25,15 @@ module.exports = {
             loader: 'css-loader',
             options: { sourceMap: true, importLoaders: 1 },
           },
-          { loader: 'postcss-loader', options: { sourceMap: true } },
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true,
+              postcssOptions: {
+                plugins: ['postcss-preset-env'],
+              },
+            },
+          },
           { loader: 'sass-loader', options: { sourceMap: true } },
         ],
       },
