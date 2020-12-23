@@ -7,4 +7,3 @@ if (enviroment === 'development') {
 } else {
   module.exports = prod;
 }
-console.log(prod);
