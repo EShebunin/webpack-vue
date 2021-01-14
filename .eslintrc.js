@@ -2,8 +2,8 @@ module.exports = {
   root: true,
   env: {
     browser: true,
-    es2021: true,
     node: true,
+    es2020: true,
   },
   extends: [
     'eslint:recommended',
@@ -13,7 +13,8 @@ module.exports = {
   ],
   parser: 'vue-eslint-parser',
   parserOptions: {
-    ecmaVersion: 12,
+    parser: 'babel-eslint',
+    ecmaVersion: 2020,
     sourceType: 'module',
   },
   plugins: ['vue', 'prettier', 'import', 'jsx-a11y'],
