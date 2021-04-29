@@ -1,29 +1,84 @@
-const webpack = require('webpack');
-const { merge } = require('webpack-merge');
-const common = require('./webpack.config.common.js');
+/* eslint-disable import/no-extraneous-dependencies */
+const { VueLoaderPlugin } = require('vue-loader');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+
+const path = require('path');
 const paths = require('./paths');
 
-module.exports = merge(common, {
+module.exports = {
   mode: 'development',
-  devtool: 'inline-source-map',
+  devtool: 'source-map',
   target: 'web',
+  resolve: {
+    alias: {
+      '@': paths.src,
+    },
+    extensions: ['*', '.js', '.vue', '.json'],
+  },
+  entry: {
+    main: path.resolve(path.join(paths.src, 'main.js')),
+  },
+  output: {
+    path: paths.build,
+    filename: 'bundle.js',
+  },
   devServer: {
-    historyApiFallback: true,
     contentBase: paths.build,
-    compress: true,
-    hot: true,
     open: true,
-    host: '0.0.0.0',
-    port: 8080,
-    useLocalIp: true,
-    overlay: true,
-    stats: 'errors-warnings',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(scss|css)$/,
+        use: [
+          'vue-style-loader',
+          'style-loader',
+          'css-loader',
+          'postcss-loader',
+          'sass-loader',
+        ],
+      },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: ['babel-loader'],
+      },
+      {
+        test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'images/[name][ext]',
+        },
+      },
+      {
+        test: /\.(woff(2)?|eot|ttf|otf|)$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'fonts/[name][ext]',
+        },
+      },
+      {
+        test: /\.svg$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'images/[name][ext]',
+        },
+      },
+    ],
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-
-    new webpack.ProvidePlugin({
-      process: 'process/browser',
+    new BundleAnalyzerPlugin(),
+    new VueLoaderPlugin(),
+    new HtmlWebpackPlugin({
+      template: path.resolve(path.join(paths.src, 'index.html')),
     }),
   ],
-});
+};

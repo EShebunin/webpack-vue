@@ -1,71 +1,84 @@
+/* eslint-disable import/no-extraneous-dependencies */
+const { VueLoaderPlugin } = require('vue-loader');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
-const webpack = require('webpack');
-const { merge } = require('webpack-merge');
-const common = require('./webpack.config.common');
+const path = require('path');
+const paths = require('./paths');
 
-module.exports = merge(common, {
+module.exports = {
   mode: 'production',
   devtool: false,
   target: 'browserslist',
+  resolve: {
+    alias: {
+      '@': paths.src,
+    },
+    extensions: ['*', '.js', '.vue', '.json'],
+  },
+  entry: {
+    main: path.resolve(path.join(paths.src, 'main.js')),
+  },
+  output: {
+    path: paths.build,
+    filename: 'bundle.js',
+  },
   module: {
     rules: [
       {
         test: /\.(scss|css)$/,
         use: [
-          MiniCssExtractPlugin.loader,
           {
-            loader: 'css-loader',
-            options: { importLoaders: 2 },
-          },
-          {
-            loader: 'postcss-loader',
+            loader: MiniCssExtractPlugin.loader,
             options: {
-              postcssOptions: {
-                plugins: ['postcss-preset-env'],
-              },
+              esModule: false,
             },
           },
-          { loader: 'sass-loader' },
+
+          'css-loader',
+          'postcss-loader',
+          'sass-loader',
         ],
+      },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: ['babel-loader'],
+      },
+      {
+        test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'images/[name][ext]',
+        },
+      },
+      {
+        test: /\.(woff(2)?|eot|ttf|otf|)$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'fonts/[name][ext]',
+        },
+      },
+      {
+        test: /\.svg$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'images/[name][ext]',
+        },
       },
     ],
   },
-  optimization: {
-    minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        parallel: true,
-        terserOptions: {
-          ecma: 6,
-          ie8: false,
-          compress: {
-            passes: 2,
-            drop_console: true,
-            warnings: false,
-          },
-          output: {
-            comments: false,
-          },
-        },
-        extractComments: false,
-      }),
-    ],
-  },
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: 'styles/[name].[contenthash].css',
-      chunkFilename: 'styles/[name].[contenthash].css',
-    }),
-
-    new webpack.ProvidePlugin({
-      process: 'process/browser',
+    new CleanWebpackPlugin(),
+    new VueLoaderPlugin(),
+    new MiniCssExtractPlugin({ filename: 'style.css' }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(path.join(paths.src, 'index.html')),
     }),
   ],
-  performance: {
-    hints: false,
-    maxEntrypointSize: 512000,
-    maxAssetSize: 512000,
-  },
-});
+};

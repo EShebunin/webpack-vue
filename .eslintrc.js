@@ -4,6 +4,7 @@ module.exports = {
     browser: true,
     node: true,
     es2020: true,
+    jest: true,
   },
   extends: [
     'eslint:recommended',
@@ -25,5 +26,6 @@ module.exports = {
   },
   rules: {
     'no-param-reassign': 'off',
+    'no-unused-expressions': 'off',
   },
 };
