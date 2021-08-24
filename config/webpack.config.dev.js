@@ -38,8 +38,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/,
-        use: ['vue-style-loader', 'css-loader'],
+        test: /\.(postcss|css)$/,
+        use: ['vue-style-loader', 'css-loader', 'postcss-loader'],
       },
       {
         test: /\.vue$/,
