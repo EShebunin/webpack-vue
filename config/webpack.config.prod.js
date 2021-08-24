@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const { VueLoaderPlugin } = require('vue-loader');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -17,17 +16,32 @@ module.exports = {
     },
     extensions: ['*', '.js', '.vue', '.json'],
   },
+
   entry: {
     main: path.resolve(path.join(paths.src, 'main.js')),
   },
+
   output: {
     path: paths.build,
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
   },
+
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendor',
+          chunks: 'all',
+        },
+      },
+    },
+  },
+
   module: {
     rules: [
       {
-        test: /\.(scss|css)$/,
+        test: /\.css$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
@@ -37,8 +51,6 @@ module.exports = {
           },
 
           'css-loader',
-          'postcss-loader',
-          'sass-loader',
         ],
       },
       {
@@ -48,7 +60,12 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: ['babel-loader'],
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+          },
+        },
       },
       {
         test: /\.(?:ico|gif|png|jpg|jpeg)$/i,

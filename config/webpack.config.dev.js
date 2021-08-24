@@ -1,7 +1,7 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const { VueLoaderPlugin } = require('vue-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 const path = require('path');
 const paths = require('./paths');
@@ -24,7 +24,12 @@ module.exports = {
     filename: 'bundle.js',
   },
   devServer: {
-    contentBase: paths.build,
+    static: {
+      directory: paths.build,
+    },
+    client: {
+      logging: 'none',
+    },
     open: true,
     headers: {
       'Access-Control-Allow-Origin': '*',
@@ -33,14 +38,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(scss|css)$/,
-        use: [
-          'vue-style-loader',
-          'style-loader',
-          'css-loader',
-          'postcss-loader',
-          'sass-loader',
-        ],
+        test: /\.css$/,
+        use: ['vue-style-loader', 'css-loader'],
       },
       {
         test: /\.vue$/,
@@ -49,7 +48,12 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: ['babel-loader'],
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+          },
+        },
       },
       {
         test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
@@ -76,6 +80,9 @@ module.exports = {
   },
   plugins: [
     new BundleAnalyzerPlugin(),
+    new ESLintPlugin({
+      extensions: ['js', 'vue'],
+    }),
     new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(path.join(paths.src, 'index.html')),
