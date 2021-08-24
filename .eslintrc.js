@@ -14,11 +14,11 @@ module.exports = {
   ],
   parser: 'vue-eslint-parser',
   parserOptions: {
-    parser: 'babel-eslint',
+    parser: '@babel/eslint-parser',
     ecmaVersion: 2020,
     sourceType: 'module',
   },
-  plugins: ['vue', 'prettier', 'import', 'jsx-a11y'],
+  plugins: ['vue', 'prettier', 'import', 'vue-a11y'],
   settings: {
     'import/resolver': {
       webpack: 'webpack.config.js',
