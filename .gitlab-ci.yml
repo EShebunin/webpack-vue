@@ -1,0 +1,19 @@
+pages:
+  image: node:latest
+
+  stage: deploy
+
+  script:
+    - npm config set registry https://registry.npmjs.org/
+    - npm i
+    - npm run build
+    - rm -rf public
+    - mkdir public
+    - cp -r dist/* public
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - public
+  only:
+    - develop
+
