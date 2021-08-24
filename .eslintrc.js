@@ -11,6 +11,7 @@ module.exports = {
     'airbnb-base',
     'plugin:vue/essential',
     'prettier',
+    'plugin:vue-a11y/recommended',
   ],
   parser: 'vue-eslint-parser',
   parserOptions: {
